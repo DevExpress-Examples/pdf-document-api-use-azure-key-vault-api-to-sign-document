@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAPIAzureKeyVaultSample", "PdfAPIAzureKeyVaultSample\PdfAPIAzureKeyVaultSample.csproj", "{ED59AFB3-5AF3-4E8F-A1A3-CC6DFFED0DBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED59AFB3-5AF3-4E8F-A1A3-CC6DFFED0DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED59AFB3-5AF3-4E8F-A1A3-CC6DFFED0DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED59AFB3-5AF3-4E8F-A1A3-CC6DFFED0DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED59AFB3-5AF3-4E8F-A1A3-CC6DFFED0DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8AE472A7-51DC-4CD1-B054-A631248D7A39}
+	EndGlobalSection
+EndGlobal
