@@ -1,3 +1,5 @@
+# How to sign a PDF document using Azure Key Vault API
+
 The DevExpress PDF Document API library allows you to retrieve a certificate and sign the document hash using any external client. This example demonstrates how to use [Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/) API to sign a PDF document. 
 
 ### Prerequisites
