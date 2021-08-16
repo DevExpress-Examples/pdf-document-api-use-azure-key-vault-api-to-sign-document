@@ -23,9 +23,10 @@ namespace PdfAPIAzureKeyVaultSample
 
                 const string keyVaultUrl = "";//Please specify your Azure Key Vault URL - (vaultUri)
                 string certificateId = ""; //Please specify the Azure Key Vault Certificate ID (certId)
+                string keyId = ""; //Please specify the Azure Key Vault Key ID for signing certificate
                 //Create a custom signer object:
                 var client = AzureKeyVaultClient.CreateClient(keyVaultUrl);
-                AzureKeyVaultSigner azureSigner = new AzureKeyVaultSigner(client, certificateId, keyVaultUrl, tsaClient);
+                AzureKeyVaultSigner azureSigner = new AzureKeyVaultSigner(client, certificateId, keyId, keyVaultUrl, tsaClient);
 
                 //Apply a signature to a new form field:
                 var signatureBuilder = new PdfSignatureBuilder(azureSigner, description);

@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Keys.Cryptography;
@@ -34,7 +33,7 @@ namespace PdfAPIAzureKeyVaultSample
         protected override string SigningAlgorithmOID => PKCS1RsaEncryption;
         protected override IEnumerable<byte[]> GetCertificates() => certificateChain;
 
-        public AzureKeyVaultSigner(AzureKeyVaultClient keyVaultClient, string certificateIdentifier, string keyId, ITsaClient tsaClient = null,
+        public AzureKeyVaultSigner(AzureKeyVaultClient keyVaultClient, string certificateIdentifier, string keyId, string keyVaultUri, ITsaClient tsaClient = null,
             IOcspClient ocspClient = null, ICrlClient crlClient = null, 
             PdfSignatureProfile profile = PdfSignatureProfile.Pdf) : base(tsaClient, ocspClient, crlClient, profile)
         {
@@ -42,25 +41,16 @@ namespace PdfAPIAzureKeyVaultSample
             this.keyId = keyId;
             //Get certificate (without piblic key) from Azure Key Vault storage via CertificateClient API or create a new one at runtime
             //You can get the whole certificate chain here
-            certificateChain = new byte[][] { keyVaultClient.GetCertificateData(keyId, certificateIdentifier) };
+            certificateChain = new byte[][] { keyVaultClient.GetCertificateData(keyVaultUri, certificateIdentifier) };
         }
         protected override byte[] SignDigest(byte[] digest)
         {
-            return keyVaultClient.Sign( SignatureAlgorithm.RS256, digest);
+            return keyVaultClient.Sign(keyId, SignatureAlgorithm.RS256, digest);
         }
     }
 
     public class AzureKeyVaultClient 
     {
-        const string rsaKeyId = "";//specify name of Key Vault's RSA key here
-        /*
-         * Alternatively, you can create a temporary RSA key:
-         * rsaKeyId = $"CloudRsaKey-{Guid.NewGuid()}";
-            var rsaKeyOptions = new CreateRsaKeyOptions(rsaKeyName, hardwareProtected: false)
-            {
-                KeySize = 2048,
-            };
-         */
         public static AzureKeyVaultClient CreateClient(string keyVaultUrl)
         {
             return new AzureKeyVaultClient(new KeyClient(new Uri(keyVaultUrl), new DefaultAzureCredential()));
@@ -80,9 +70,9 @@ namespace PdfAPIAzureKeyVaultSample
             };
             defaultAzureCredential = new DefaultAzureCredential(credentialOptions);
         }
-       public byte[] Sign(Azure.Security.KeyVault.Keys.Cryptography.SignatureAlgorithm algorithm, byte[] digest)
+       public byte[] Sign(string keyId, SignatureAlgorithm algorithm, byte[] digest)
         {
-            KeyVaultKey cloudRsaKey = client.GetKey(rsaKeyId);
+            KeyVaultKey cloudRsaKey = client.GetKey(keyId);
             var rsaCryptoClient = new CryptographyClient(cloudRsaKey.Id, defaultAzureCredential);
 
             SignResult rsaSignResult = rsaCryptoClient.Sign(algorithm, digest);
