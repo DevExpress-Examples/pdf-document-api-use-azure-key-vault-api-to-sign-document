@@ -19,9 +19,10 @@ Namespace PdfAPIAzureKeyVaultSample
 
 				Const keyVaultUrl As String = "" 'Please specify your Azure Key Vault URL - (vaultUri)
 				Dim certificateId As String = "" 'Please specify the Azure Key Vault Certificate ID (certId)
+				Dim keyId As String = "" 'Please specify the Azure Key Vault Key ID for signing certificate
 				'Create a custom signer object:
 				Dim client = AzureKeyVaultClient.CreateClient(keyVaultUrl)
-				Dim azureSigner As New AzureKeyVaultSigner(client, certificateId, keyVaultUrl, tsaClient)
+				Dim azureSigner As New AzureKeyVaultSigner(client, certificateId, keyId, keyVaultUrl, tsaClient)
 
 				'Apply a signature to a new form field:
 				Dim signatureBuilder = New PdfSignatureBuilder(azureSigner, description)
