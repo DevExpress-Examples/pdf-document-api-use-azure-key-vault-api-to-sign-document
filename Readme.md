@@ -26,6 +26,6 @@ Follow these steps to configure this example with a self-signed certificate gene
 1. Create Azure Key Vault on Azure Portal. Assign the Key Vault URL to the **keyVaultUrl** variable in this example.
 2. Generate a self-signed certificate. Assign the certificate name to the **certificateId** variable.
 3. Open the certificate properties on Azure Portal. Find the "Key Identifier" field. 
-![enter image description here](https://github.com/DevExpress-Examples/How-to-sign-a-PDF-document-using-Azure-Key-Vault-API/blob/20.2.5+/Images/Azure%20Key%20Vault%202.png)
+![enter image description here](./Images/Azure%20Key%20Vault%202.png)
 4.  Copy the Azure Key Id from the "Key Identifier" string and assign it to the **keyId** variable in this example.
-![enter image description here](https://github.com/DevExpress-Examples/How-to-sign-a-PDF-document-using-Azure-Key-Vault-API/blob/20.2.5+/Images/Azure%20Key%20Vault.png)
+![enter image description here](./Images/Azure%20Key%20Vault.png)
