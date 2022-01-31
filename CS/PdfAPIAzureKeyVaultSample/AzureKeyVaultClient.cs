@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿# region #using
+using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Keys.Cryptography;
@@ -8,48 +9,14 @@ using DevExpress.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.Serialization;
-using System.Text;
+#endregion #using
 
 
 
 namespace PdfAPIAzureKeyVaultSample
 {
-    public class AzureKeyVaultSigner : Pkcs7SignerBase
-    {
-        //OID for RSA signing algorithm:
-        const string PKCS1RsaEncryption = "1.2.840.113549.1.1.1";
-
-        readonly AzureKeyVaultClient keyVaultClient;
-        readonly string keyId;
-        readonly byte[][] certificateChain;
-
-
-        //Must match with key algorithm (RSA or ECDSA)
-        //For RSA PKCS1RsaEncryption(1.2.840.113549.1.1.1) OID can be used with any digest algorithm
-        //For ECDSA use OIDs from this family http://oid-info.com/get/1.2.840.10045.4.3 
-        //Specified digest algorithm must be same with DigestCalculator algorithm.
-        protected override IDigestCalculator DigestCalculator => new DevExpress.Office.DigitalSignatures.DigestCalculator(HashAlgorithmType.SHA256); //Digest algorithm
-        protected override string SigningAlgorithmOID => PKCS1RsaEncryption;
-        protected override IEnumerable<byte[]> GetCertificates() => certificateChain;
-
-        public AzureKeyVaultSigner(AzureKeyVaultClient keyVaultClient, string certificateIdentifier, string keyId, string keyVaultUri, ITsaClient tsaClient = null,
-            IOcspClient ocspClient = null, ICrlClient crlClient = null, 
-            PdfSignatureProfile profile = PdfSignatureProfile.Pdf) : base(tsaClient, ocspClient, crlClient, profile)
-        {
-            this.keyVaultClient = keyVaultClient;
-            this.keyId = keyId;
-            //Get certificate (without piblic key) from Azure Key Vault storage via CertificateClient API or create a new one at runtime
-            //You can get the whole certificate chain here
-            certificateChain = new byte[][] { keyVaultClient.GetCertificateData(keyVaultUri, certificateIdentifier) };
-        }
-        protected override byte[] SignDigest(byte[] digest)
-        {
-            return keyVaultClient.Sign(keyId, SignatureAlgorithm.RS256, digest);
-        }
-    }
-
-    public class AzureKeyVaultClient 
+    #region #client
+    public class AzureKeyVaultClient
     {
         public static AzureKeyVaultClient CreateClient(string keyVaultUrl)
         {
@@ -62,7 +29,7 @@ namespace PdfAPIAzureKeyVaultSample
         AzureKeyVaultClient(KeyClient client)
         {
             this.client = client;
-            
+
             var credentialOptions = new DefaultAzureCredentialOptions
             {
                 ExcludeInteractiveBrowserCredential = false,
@@ -70,7 +37,7 @@ namespace PdfAPIAzureKeyVaultSample
             };
             defaultAzureCredential = new DefaultAzureCredential(credentialOptions);
         }
-       public byte[] Sign(string keyId, SignatureAlgorithm algorithm, byte[] digest)
+        public byte[] Sign(string keyId, SignatureAlgorithm algorithm, byte[] digest)
         {
             KeyVaultKey cloudRsaKey = client.GetKey(keyId);
             var rsaCryptoClient = new CryptographyClient(cloudRsaKey.Id, defaultAzureCredential);
@@ -84,12 +51,50 @@ namespace PdfAPIAzureKeyVaultSample
 
         public byte[] GetCertificateData(string keyVaultUrl, string certificateIdentifier)
         {
-            var certificateClient = new CertificateClient(new Uri (keyVaultUrl), defaultAzureCredential);
+            var certificateClient = new CertificateClient(new Uri(keyVaultUrl), defaultAzureCredential);
             KeyVaultCertificateWithPolicy cert = certificateClient.GetCertificate(certificateIdentifier);
-            
+
             return cert.Cer;
         }
- 
-    
+
     }
+    #endregion #client
+
+    #region #signer
+    public class AzureKeyVaultSigner : Pkcs7SignerBase
+    {
+        // OID for RSA signing algorithm:
+        const string PKCS1RsaEncryption = "1.2.840.113549.1.1.1";
+
+        readonly AzureKeyVaultClient keyVaultClient;
+        readonly string keyId;
+        readonly byte[][] certificateChain;
+
+
+        // Must match with key algorithm (RSA or ECDSA)
+        // For RSA PKCS1RsaEncryption(1.2.840.113549.1.1.1) OID can be used with any digest algorithm
+        // For ECDSA use OIDs from this family http://oid-info.com/get/1.2.840.10045.4.3 
+        // Specified digest algorithm must be same with DigestCalculator algorithm.
+        protected override IDigestCalculator DigestCalculator => new DigestCalculator(HashAlgorithmType.SHA256); //Digest algorithm
+        protected override string SigningAlgorithmOID => PKCS1RsaEncryption;
+        protected override IEnumerable<byte[]> GetCertificates() => certificateChain;
+
+        public AzureKeyVaultSigner(AzureKeyVaultClient keyVaultClient, string certificateIdentifier, string keyId, string keyVaultUri, ITsaClient tsaClient = null,
+            IOcspClient ocspClient = null, ICrlClient crlClient = null,
+            PdfSignatureProfile profile = PdfSignatureProfile.Pdf) : base(tsaClient, ocspClient, crlClient, profile)
+        {
+            this.keyVaultClient = keyVaultClient;
+            this.keyId = keyId;
+
+            // Get certificate (without a public key) from Azure Key Vault storage
+            // via CertificateClient API or create a new one at runtime
+            // You can get the whole certificate chain here
+            certificateChain = new byte[][] { keyVaultClient.GetCertificateData(keyVaultUri, certificateIdentifier) };
+        }
+        protected override byte[] SignDigest(byte[] digest)
+        {
+            return keyVaultClient.Sign(keyId, SignatureAlgorithm.RS256, digest);
+        }
+    }
+    #endregion
 }
