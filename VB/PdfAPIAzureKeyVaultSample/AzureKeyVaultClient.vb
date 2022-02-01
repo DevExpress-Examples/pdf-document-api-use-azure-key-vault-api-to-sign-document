@@ -10,10 +10,10 @@ Imports System
 Imports System.Collections.Generic
 Imports System.Diagnostics
 
-#End Region  ' #using
+#End Region
 Namespace PdfAPIAzureKeyVaultSample
 
-#Region "#client"
+#Region "client"
     Public Class AzureKeyVaultClient
 
         Public Shared Function CreateClient(ByVal keyVaultUrl As String) As AzureKeyVaultClient
@@ -45,12 +45,12 @@ Namespace PdfAPIAzureKeyVaultSample
         End Function
     End Class
 
-#End Region  ' #client
-#Region "#signer"
+#End Region
+#Region "signer"
     Public Class AzureKeyVaultSigner
         Inherits Pkcs7SignerBase
 
-        ' OID for RSA signing algorithm:
+        ' OID for RSA signature algorithm:
         Const PKCS1RsaEncryption As String = "1.2.840.113549.1.1.1"
 
         Private ReadOnly keyVaultClient As AzureKeyVaultClient
@@ -60,9 +60,9 @@ Namespace PdfAPIAzureKeyVaultSample
         Private ReadOnly certificateChain As Byte()()
 
         ' Must match with key algorithm (RSA or ECDSA)
-        ' For RSA PKCS1RsaEncryption(1.2.840.113549.1.1.1) OID can be used with any digest algorithm
-        ' For ECDSA use OIDs from this family http://oid-info.com/get/1.2.840.10045.4.3 
-        ' Specified digest algorithm must be same with DigestCalculator algorithm.
+        ' OID for RSA PKCS1RsaEncryption(1.2.840.113549.1.1.1) can have any digest algorithm
+        ' For ECDSA, use OIDs from this family: http://oid-info.com/get/1.2.840.10045.4.3 
+        ' Specified digest algorithm must be the same as to DigestCalculator algorithm
         Protected Overrides ReadOnly Property DigestCalculator As IDigestCalculator
             Get
                 Return New DigestCalculator(HashAlgorithmType.SHA256)
@@ -84,7 +84,7 @@ Namespace PdfAPIAzureKeyVaultSample
             Me.keyVaultClient = keyVaultClient
             Me.keyId = keyId
             ' Get certificate (without a public key) from Azure Key Vault storage
-            ' via CertificateClient API or create a new one at runtime
+            ' or create a new one at runtime
             ' You can get the whole certificate chain here
             certificateChain = New Byte()() {keyVaultClient.GetCertificateData(keyVaultUri, certificateIdentifier)}
         End Sub
