@@ -1,4 +1,4 @@
-﻿# region #using
+#region using
 using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
@@ -9,13 +9,13 @@ using DevExpress.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-#endregion #using
+#endregion
 
 
 
 namespace PdfAPIAzureKeyVaultSample
 {
-    #region #client
+    #region client
     public class AzureKeyVaultClient
     {
         public static AzureKeyVaultClient CreateClient(string keyVaultUrl)
@@ -58,9 +58,9 @@ namespace PdfAPIAzureKeyVaultSample
         }
 
     }
-    #endregion #client
+    #endregion
 
-    #region #signer
+    #region signer
     public class AzureKeyVaultSigner : Pkcs7SignerBase
     {
         // OID for RSA signing algorithm:
