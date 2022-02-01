@@ -1,10 +1,10 @@
-﻿#region #using
+#region using
 using DevExpress.Office.DigitalSignatures;
 using DevExpress.Office.Tsp;
 using DevExpress.Pdf;
 using System;
 using System.Diagnostics;
-#endregion #using
+#endregion
 
 namespace PdfAPIAzureKeyVaultSample
 {
@@ -12,7 +12,7 @@ namespace PdfAPIAzureKeyVaultSample
     {
         static void Main(string[] args)
         {
-            #region #main
+            #region main
             using (var signer = new PdfDocumentSigner(@"Document.pdf"))
             {
                 // Create a timestamp:

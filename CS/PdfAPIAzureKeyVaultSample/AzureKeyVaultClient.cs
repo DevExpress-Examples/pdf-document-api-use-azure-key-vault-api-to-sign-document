@@ -1,4 +1,4 @@
-﻿#region using
+# region #using
 using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Keys;
