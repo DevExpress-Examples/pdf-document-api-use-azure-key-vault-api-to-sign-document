@@ -1,17 +1,17 @@
-#Region "#using"
+#Region "using"
 Imports DevExpress.Office.DigitalSignatures
 Imports DevExpress.Office.Tsp
 Imports DevExpress.Pdf
 Imports System
 Imports System.Diagnostics
 
-#End Region  ' #using
+#End Region
 Namespace PdfAPIAzureKeyVaultSample
 
     Friend Class Program
 
         Shared Sub Main(ByVal args As String())
-#Region "#main"
+#Region "main"
             Using signer = New PdfDocumentSigner("Document.pdf")
                 ' Create a timestamp:
                 Dim tsaClient As ITsaClient = New TsaClient(New Uri("https://freetsa.org/tsr"), HashAlgorithmType.SHA256)
