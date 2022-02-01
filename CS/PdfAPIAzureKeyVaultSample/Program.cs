@@ -24,13 +24,13 @@ namespace PdfAPIAzureKeyVaultSample
                 description.Name = "SignatureField";
                 description.SignatureBounds = new PdfRectangle(10, 10, 50, 150);
 
-                // Please specify your Azure Key Vault URL - (vaultUri)
+                // Specify your Azure Key Vault URL - (vaultUri)
                 const string keyVaultUrl = "";
 
-                // Please specify the Azure Key Vault Certificate ID (certId)
+                // Specify the Azure Key Vault Certificate ID (certId)
                 string certificateId = "";
 
-                // Please specify the Azure Key Vault Key ID for signing certificate
+                // Specify the Azure Key Vault Key ID for a certificate
                 string keyId = "";
 
                 // Create a custom signer object:
@@ -40,7 +40,7 @@ namespace PdfAPIAzureKeyVaultSample
                 // Apply a signature to a new form field:
                 var signatureBuilder = new PdfSignatureBuilder(azureSigner, description);
 
-                // Specify the image and signer information:
+                // Specify an image and signer information:
                 signatureBuilder.SetImageData(System.IO.File.ReadAllBytes("signature.jpg"));
                 signatureBuilder.Location = "LOCATION";
 
