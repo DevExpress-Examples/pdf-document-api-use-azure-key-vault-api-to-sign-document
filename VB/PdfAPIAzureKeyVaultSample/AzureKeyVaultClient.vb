@@ -1,4 +1,4 @@
-#Region "#using"
+#Region "using"
 Imports Azure.Identity
 Imports Azure.Security.KeyVault.Certificates
 Imports Azure.Security.KeyVault.Keys
@@ -10,10 +10,10 @@ Imports System
 Imports System.Collections.Generic
 Imports System.Diagnostics
 
-#End Region  ' #using
+#End Region
 Namespace PdfAPIAzureKeyVaultSample
 
-#Region "#client"
+#Region "client"
     Public Class AzureKeyVaultClient
 
         Public Shared Function CreateClient(ByVal keyVaultUrl As String) As AzureKeyVaultClient
@@ -45,8 +45,8 @@ Namespace PdfAPIAzureKeyVaultSample
         End Function
     End Class
 
-#End Region  ' #client
-#Region "#signer"
+#End Region
+#Region "signer"
     Public Class AzureKeyVaultSigner
         Inherits Pkcs7SignerBase
 
