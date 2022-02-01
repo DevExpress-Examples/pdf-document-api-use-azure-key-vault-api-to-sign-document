@@ -20,18 +20,18 @@ Namespace PdfAPIAzureKeyVaultSample
                 Dim description = New PdfSignatureFieldInfo(pageNumber)
                 description.Name = "SignatureField"
                 description.SignatureBounds = New PdfRectangle(10, 10, 50, 150)
-                ' Please specify your Azure Key Vault URL - (vaultUri)
+                ' Specify your Azure Key Vault URL - (vaultUri)
                 Const keyVaultUrl As String = ""
-                ' Please specify the Azure Key Vault Certificate ID (certId)
+                ' Specify the Azure Key Vault Certificate ID (certId)
                 Dim certificateId As String = ""
-                ' Please specify the Azure Key Vault Key ID for signing certificate
+                ' Specify the Azure Key Vault Key ID for a certificate
                 Dim keyId As String = ""
                 ' Create a custom signer object:
                 Dim client = AzureKeyVaultClient.CreateClient(keyVaultUrl)
                 Dim azureSigner As AzureKeyVaultSigner = New AzureKeyVaultSigner(client, certificateId, keyId, keyVaultUrl, tsaClient)
                 ' Apply a signature to a new form field:
                 Dim signatureBuilder = New PdfSignatureBuilder(azureSigner, description)
-                ' Specify the image and signer information:
+                ' Specify an image and signer information:
                 signatureBuilder.SetImageData(IO.File.ReadAllBytes("signature.jpg"))
                 signatureBuilder.Location = "LOCATION"
                 ' Sign and save the document:
