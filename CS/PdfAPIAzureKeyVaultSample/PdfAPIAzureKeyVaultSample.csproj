@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0/TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.5.0" />
     <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.3.0-beta.4" />
     <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.3.0-beta.6" />
-    <PackageReference Include="DevExpress.Document.Processor" Version="20.2.9" />
+    <PackageReference Include="DevExpress.Document.Processor" Version="23.2.1-alpha-23240" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Document.pdf">
