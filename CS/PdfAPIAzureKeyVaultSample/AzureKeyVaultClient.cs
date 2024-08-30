@@ -67,8 +67,6 @@ namespace PdfAPIAzureKeyVaultSample
 
         readonly AzureKeyVaultClient keyVaultClient;
         readonly KeyVaultCertificateWithPolicy certificate;
-        List<byte[]> certificateChain = new List<byte[]>();
-
 
         //Must match with key algorithm (RSA or ECDSA)
         //For RSA PKCS1RsaEncryption(1.2.840.113549.1.1.1) OID can be used with any digest algorithm
@@ -76,7 +74,6 @@ namespace PdfAPIAzureKeyVaultSample
         //Specified digest algorithm must be same with DigestCalculator algorithm.
         protected override IDigestCalculator DigestCalculator => new DigestCalculator(HashAlgorithmType.SHA256); //Digest algorithm
         protected override string SigningAlgorithmOID => PKCS1RsaEncryption;
-        protected override IEnumerable<byte[]> GetCertificates() => certificateChain;
 
         /// <summary>
         /// Construct an instance of AzureKeyVaultSigner
@@ -104,11 +101,11 @@ namespace PdfAPIAzureKeyVaultSample
             //Get certificate (without public key) via GetCertificateAsync API
             //You can get the whole certificate chain here
             this.certificate = keyVaultClient.GetCertificateData($"{certificateName}/{certificateVersion}");
-            BuildCertificateChain();
         }
 
-        private void BuildCertificateChain()
+        protected override IEnumerable<byte[]> GetCertificates()
         {
+            List<byte[]> certificateChain = new List<byte[]>();
             var x509 = new X509Certificate2(certificate.Cer);
             var chain = new X509Chain();
             {
@@ -117,13 +114,11 @@ namespace PdfAPIAzureKeyVaultSample
                 foreach (var item in chain.ChainElements)
                     certificateChain.Add(item.Certificate.GetRawCertData());
             }
+            return certificateChain;
         }
 
         protected override byte[] SignDigest(byte[] digest)
         {
-            // use the name of the retrieved Certificate object to sign the digest
-            // as it may differ from the name used to retrieve the certificate if auto-selection occurred.
-            // https://learn.microsoft.com/en-us/azure/key-vault/general/about-keys-secrets-certificates#objects-identifiers-and-versioning
             var signature = keyVaultClient.Sign(certificate.Name, SignatureAlgorithm.RS256, digest);
             return signature;
         }
