@@ -27,15 +27,23 @@ namespace PdfAPIAzureKeyVaultSample
                 // Specify your Azure Key Vault URL - (vaultUri)
                 const string keyVaultUrl = "";
 
-                // Specify the Azure Key Vault Certificate ID (certId)
-                string certificateId = "";
+                // Specify the Name of and Azure Key Vault Certificate (certId).
+                // This is listed in the "Name" column of your Azure Portal, Certificates page
+                string certificateName = "";
 
-                // Specify the Azure Key Vault Key ID for a certificate
-                string keyId = "";
+                // Specify the Version for the Azure Key Vault certificate.
+                // This is listed in the "Version" column of your Azure Portal, Certificates/[Certificate Name] page.
+                // Leave this empty, or null, to auto-select the "Current" version of the given certificate.
+                // Warning: Auto-selection will not "fall back" to a non-current certificate should the current certificate
+                //          be disabled, meaning that if the chosen certificate is disabled, signing will generate an error.  
+                string certificateVersion = "";
 
                 // Create a custom signer object:
-                var client = AzureKeyVaultClient.CreateClient(keyVaultUrl);
-                AzureKeyVaultSigner azureSigner = new AzureKeyVaultSigner(client, certificateId, keyId, keyVaultUrl, tsaClient);
+                var client = AzureKeyVaultClient.CreateClient(new Uri(keyVaultUrl));
+                AzureKeyVaultSigner azureSigner = new AzureKeyVaultSigner(client, 
+                    certificateName: certificateName, 
+                    certificateVersion: certificateVersion, 
+                    tsaClient);
 
                 // Apply a signature to a new form field:
                 var signatureBuilder = new PdfSignatureBuilder(azureSigner, description);
