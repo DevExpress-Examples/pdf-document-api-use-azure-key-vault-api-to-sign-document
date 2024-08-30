@@ -121,6 +121,9 @@ namespace PdfAPIAzureKeyVaultSample
 
         protected override byte[] SignDigest(byte[] digest)
         {
+            // use the name of the retrieved Certificate object to sign the digest
+            // as it may differ from the name used to retrieve the certificate if auto-selection occurred.
+            // https://learn.microsoft.com/en-us/azure/key-vault/general/about-keys-secrets-certificates#objects-identifiers-and-versioning
             var signature = keyVaultClient.Sign(certificate.Name, SignatureAlgorithm.RS256, digest);
             return signature;
         }
