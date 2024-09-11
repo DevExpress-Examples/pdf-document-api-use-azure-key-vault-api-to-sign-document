@@ -6,8 +6,6 @@ Imports Azure.Security.KeyVault.Keys.Cryptography
 Imports DevExpress.Office.DigitalSignatures
 Imports DevExpress.Office.Tsp
 Imports DevExpress.Pdf
-Imports System
-Imports System.Collections.Generic
 Imports System.Diagnostics
 
 #End Region
@@ -34,7 +32,7 @@ Namespace PdfAPIAzureKeyVaultSample
             Dim cloudRsaKey As KeyVaultKey = client.GetKey(keyId)
             Dim rsaCryptoClient = New CryptographyClient(cloudRsaKey.Id, defaultAzureCredential)
             Dim rsaSignResult As SignResult = rsaCryptoClient.Sign(algorithm, digest)
-            Call Debug.WriteLine($"Signed digest using the algorithm {rsaSignResult.Algorithm}, with key {rsaSignResult.KeyId}. " & $"The resulting signature is {Convert.ToBase64String(rsaSignResult.Signature)}")
+            Debug.WriteLine($"Signed digest using the algorithm {rsaSignResult.Algorithm}, with key {rsaSignResult.KeyId}. " & $"The resulting signature is {Convert.ToBase64String(rsaSignResult.Signature)}")
             Return rsaSignResult.Signature
         End Function
 

@@ -2,7 +2,6 @@
 Imports DevExpress.Office.DigitalSignatures
 Imports DevExpress.Office.Tsp
 Imports DevExpress.Pdf
-Imports System
 Imports System.Diagnostics
 
 #End Region
@@ -32,12 +31,12 @@ Namespace PdfAPIAzureKeyVaultSample
                 ' Apply a signature to a new form field:
                 Dim signatureBuilder = New PdfSignatureBuilder(azureSigner, description)
                 ' Specify an image and signer information:
-                signatureBuilder.SetImageData(IO.File.ReadAllBytes("signature.jpg"))
+                signatureBuilder.SetImageData(System.IO.File.ReadAllBytes("signature.jpg"))
                 signatureBuilder.Location = "LOCATION"
                 ' Sign and save the document:
                 Dim output As String = "SignedDocument.pdf"
                 signer.SaveDocument(output, signatureBuilder)
-                Call Process.Start(New ProcessStartInfo(output) With {.UseShellExecute = True})
+                Process.Start(New ProcessStartInfo(output) With {.UseShellExecute = True})
             End Using
 #End Region
         End Sub
