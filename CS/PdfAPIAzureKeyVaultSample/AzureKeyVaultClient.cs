@@ -15,44 +15,37 @@ using System.Security.Cryptography.X509Certificates;
 
 
 
-namespace PdfAPIAzureKeyVaultSample
-{
+namespace PdfAPIAzureKeyVaultSample {
     #region client
-    public class AzureKeyVaultClient
-    {
-        public static AzureKeyVaultClient CreateClient(Uri keyVaultUri)
-        {
-            var tokenCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-            {
+    public class AzureKeyVaultClient {
+        public static AzureKeyVaultClient CreateClient(Uri keyVaultUri) {
+            var tokenCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions {
                 ExcludeInteractiveBrowserCredential = false,
                 ExcludeVisualStudioCodeCredential = true
             });
 
-            return new AzureKeyVaultClient(new KeyClient(keyVaultUri, tokenCredential), tokenCredential);
+            return new AzureKeyVaultClient(new KeyClient(keyVaultUri,tokenCredential),tokenCredential);
         }
 
         readonly KeyClient client;
 
         TokenCredential clientCredentials;
-        AzureKeyVaultClient(KeyClient client, TokenCredential cryptoClientCredential)
-        {
+        AzureKeyVaultClient(KeyClient client,TokenCredential cryptoClientCredential) {
             this.client = client;
             this.clientCredentials = cryptoClientCredential;
         }
-        public byte[] Sign(string certificateName, SignatureAlgorithm algorithm, byte[] digest, string version = null)
-        {
-            KeyVaultKey cloudRsaKey = client.GetKey(certificateName, version: version);
-            var rsaCryptoClient = new CryptographyClient(cloudRsaKey.Id, clientCredentials);
+        public byte[] Sign(string certificateName,SignatureAlgorithm algorithm,byte[] digest,string version = null) {
+            KeyVaultKey cloudRsaKey = client.GetKey(certificateName,version: version);
+            var rsaCryptoClient = new CryptographyClient(cloudRsaKey.Id,clientCredentials);
 
-            SignResult rsaSignResult = rsaCryptoClient.Sign(algorithm, digest);
+            SignResult rsaSignResult = rsaCryptoClient.Sign(algorithm,digest);
             Debug.WriteLine($"Signed digest using the algorithm {rsaSignResult.Algorithm}, " +
                 $"with key {rsaSignResult.KeyId}. The resulting signature is {Convert.ToBase64String(rsaSignResult.Signature)}");
             return rsaSignResult.Signature;
         }
 
-        public KeyVaultCertificateWithPolicy GetCertificateData(string keyId)
-        {
-            var certificateClient = new CertificateClient(client.VaultUri, clientCredentials);
+        public KeyVaultCertificateWithPolicy GetCertificateData(string keyId) {
+            var certificateClient = new CertificateClient(client.VaultUri,clientCredentials);
             KeyVaultCertificateWithPolicy cert = certificateClient.GetCertificate(keyId);
             return cert;
         }
@@ -60,8 +53,7 @@ namespace PdfAPIAzureKeyVaultSample
     #endregion
 
     #region signer
-    public class AzureKeyVaultSigner : Pkcs7SignerBase
-    {
+    public class AzureKeyVaultSigner : Pkcs7SignerBase {
         //OID for RSA signing algorithm:
         const string PKCS1RsaEncryption = "1.2.840.113549.1.1.1";
 
@@ -86,8 +78,7 @@ namespace PdfAPIAzureKeyVaultSample
         /// <param name="crlClient"></param>
         /// <param name="profile"></param>
         /// <exception cref="System.ArgumentException"></exception>
-        public AzureKeyVaultSigner(AzureKeyVaultClient keyVaultClient, string certificateName, string certificateVersion = null, ITsaClient tsaClient = null, IOcspClient ocspClient = null, ICrlClient crlClient = null, PdfSignatureProfile profile = PdfSignatureProfile.PAdES_BES) : base(tsaClient, ocspClient, crlClient, profile)
-        {
+        public AzureKeyVaultSigner(AzureKeyVaultClient keyVaultClient,string certificateName,string certificateVersion = null,ITsaClient tsaClient = null,IOcspClient ocspClient = null,ICrlClient crlClient = null,PdfSignatureProfile profile = PdfSignatureProfile.PAdES_BES) : base(tsaClient,ocspClient,crlClient,profile) {
             if (string.IsNullOrEmpty(certificateName))
                 throw new System.ArgumentException("Certificate name must not be null or empty.");
 
@@ -103,8 +94,7 @@ namespace PdfAPIAzureKeyVaultSample
             this.certificate = keyVaultClient.GetCertificateData($"{certificateName}/{certificateVersion}");
         }
 
-        protected override IEnumerable<byte[]> GetCertificates()
-        {
+        protected override IEnumerable<byte[]> GetCertificates() {
             List<byte[]> certificateChain = new List<byte[]>();
             var x509 = new X509Certificate2(certificate.Cer);
             var chain = new X509Chain();
@@ -117,9 +107,8 @@ namespace PdfAPIAzureKeyVaultSample
             return certificateChain;
         }
 
-        protected override byte[] SignDigest(byte[] digest)
-        {
-            var signature = keyVaultClient.Sign(certificate.Name, SignatureAlgorithm.RS256, digest);
+        protected override byte[] SignDigest(byte[] digest) {
+            var signature = keyVaultClient.Sign(certificate.Name,SignatureAlgorithm.RS256,digest);
             return signature;
         }
     }

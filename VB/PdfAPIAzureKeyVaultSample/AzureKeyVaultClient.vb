@@ -8,6 +8,7 @@ Imports DevExpress.Office.DigitalSignatures
 Imports DevExpress.Office.Tsp
 Imports DevExpress.Pdf
 Imports System.Diagnostics
+Imports System.Security.Cryptography.X509Certificates
 
 #End Region
 Namespace PdfAPIAzureKeyVaultSample
@@ -87,17 +88,17 @@ Namespace PdfAPIAzureKeyVaultSample
             MyBase.New(tsaClient, ocspClient, crlClient, profile)
             If String.IsNullOrEmpty(certificateName) Then Throw New System.ArgumentException("Certificate name must not be null or empty.")
             If certificateName.Contains("/"c) Then Throw New System.ArgumentException("Invalid certificate name. Certificate name must not contain '/' character.")
-             ''' Cannot convert IfStatementSyntax, System.InvalidCastException: Unable to cast object of type 'Microsoft.CodeAnalysis.VisualBasic.Syntax.EmptyStatementSyntax' to type 'Microsoft.CodeAnalysis.VisualBasic.Syntax.ExpressionSyntax'.
-'''    at ICSharpCode.CodeConverter.VB.MethodBodyExecutableStatementVisitor.VisitIfStatement(IfStatementSyntax node)
-'''    at Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor`1.Visit(SyntaxNode node)
-'''    at ICSharpCode.CodeConverter.VB.CommentConvertingMethodBodyVisitor.DefaultVisit(SyntaxNode node)
-''' 
-''' Input:
-''' 
-'''             if (certificateVersion != null && certificateVersion.Contains('/'))
-'''                 throw new System.ArgumentException("Invalid certificate version. Certificate version must not contain '/' character.");
-''' 
-'''  Me.keyVaultClient = keyVaultClient
+            ''' Cannot convert IfStatementSyntax, System.InvalidCastException: Unable to cast object of type 'Microsoft.CodeAnalysis.VisualBasic.Syntax.EmptyStatementSyntax' to type 'Microsoft.CodeAnalysis.VisualBasic.Syntax.ExpressionSyntax'.
+            '''    at ICSharpCode.CodeConverter.VB.MethodBodyExecutableStatementVisitor.VisitIfStatement(IfStatementSyntax node)
+            '''    at Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor`1.Visit(SyntaxNode node)
+            '''    at ICSharpCode.CodeConverter.VB.CommentConvertingMethodBodyVisitor.DefaultVisit(SyntaxNode node)
+            ''' 
+            ''' Input:
+            ''' 
+            '''             if (certificateVersion != null && certificateVersion.Contains('/'))
+            '''                 throw new System.ArgumentException("Invalid certificate version. Certificate version must not contain '/' character.");
+            ''' 
+            '''  Me.keyVaultClient = keyVaultClient
             'Get certificate (without public key) via GetCertificateAsync API
             'You can get the whole certificate chain here
             certificate = keyVaultClient.GetCertificateData($"{certificateName}/{certificateVersion}")
