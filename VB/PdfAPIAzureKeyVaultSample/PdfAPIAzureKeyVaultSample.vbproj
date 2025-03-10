@@ -1,25 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <OptionExplicit>On</OptionExplicit>
-    <OptionCompare>Binary</OptionCompare>
-    <OptionStrict>Off</OptionStrict>
-    <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Import Include="Microsoft.VisualBasic" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Collections" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.5.0" />
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
     <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.3.0-beta.4" />
     <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.3.0-beta.6" />
-    <PackageReference Include="DevExpress.Document.Processor" Version="24.2.1-alpha-24207" />
+    <PackageReference Include="DevExpress.Document.Processor" Version="24.2.5" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Document.pdf">
