@@ -31,7 +31,7 @@ Follow these steps to configure this example with a self-signed certificate gene
 4.  Copy the Azure Key Id from the "Key Identifier" string and assign it to the **keyId** variable in this example.
 ![enter image description here](./Images/Azure%20Key%20Vault.png)
 <!-- feedback -->
-## Does this example address your development requirements/objectives?
+## Does This Example Address Your Development Requirements/Objectives?
 
 [<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=pdf-document-api-use-azure-key-vault-api-to-sign-document&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=pdf-document-api-use-azure-key-vault-api-to-sign-document&~~~was_helpful=no)
 
